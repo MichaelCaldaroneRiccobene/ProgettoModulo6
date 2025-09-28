@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Turret_On_Player : Turret
@@ -17,12 +15,18 @@ public class Turret_On_Player : Turret
 
     public override void Shoot()
     {
-        Bullet b = Control_Turrent.GetBullet();
+        GameObject obj = ManagerPool.Instance.GetGameObjFromPool(idBullet);
+        Bullet b = null;
 
+        if (obj.TryGetComponent(out Bullet bullet)) b = bullet;
+        if (b == null)
+        {
+            Debug.LogError("Not Bullet");
+            return;
+        }
+
+        b.OnShoot((target.transform.position - transform.position).normalized);
         b.transform.position = firePoint.position;
-        b.Dir = target.transform.position - transform.position;
-        b.Damage = damage;
-        b.SpeedBullet = speedBullet;
 
         b.gameObject.SetActive(true);
         lastTimeShoot = Time.time;

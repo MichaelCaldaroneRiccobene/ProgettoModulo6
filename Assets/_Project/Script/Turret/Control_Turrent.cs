@@ -29,7 +29,7 @@ public class Control_Turrent : MonoBehaviour
             if (turret != null)
             {
                 //if(Target != null) turret.target = Target;
-                turret.Control_Turrent = this;
+                //turret.Control_Turrent = this;
             }
         }
     }

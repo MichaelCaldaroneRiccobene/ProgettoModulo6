@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Turret_Magic : Turret
@@ -26,12 +25,19 @@ public class Turret_Magic : Turret
             float factor = Random.Range(0, 2) == 0 ? 1 : -1;
             Vector3 randomPos = new Vector3(Random.Range(0.5f, 3) * factor, Random.Range(0.5f, 3) * factor, Random.Range(0.5f, 3) * factor);
 
-            Bullet b = Control_Turrent.GetBullet();          
 
+            GameObject obj = ManagerPool.Instance.GetGameObjFromPool(idBullet);
+            Bullet b = null;
+
+            if (obj.TryGetComponent(out Bullet bullet)) b = bullet;
+            if (b == null)
+            {
+                Debug.LogError("Not Bullet");
+                yield break;
+            }
+
+            b.OnShoot((target.transform.position - transform.position).normalized);
             b.transform.position = firePoint.position + randomPos;
-            b.Dir = target.transform.position - transform.position;
-            b.SpeedBullet = speedBullet;
-            b.Damage = damage;
 
             b.gameObject.SetActive(true);
             yield return new WaitForSeconds(timeForNextBulletToShootInSequence);

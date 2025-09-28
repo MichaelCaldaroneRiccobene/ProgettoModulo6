@@ -21,6 +21,7 @@ public class ManagerLevel : GenericSingleton<ManagerLevel>
 {
     [SerializeField] private List<PlayerPossibleState> playerList;
     [SerializeField] private CinemachineBrain brainCamera;
+    [SerializeField] private CinemachineVirtualCameraBase midCamera;
 
     [SerializeField] private GameObject islandMenu;
     [SerializeField] private GameObject playerUI;
@@ -62,15 +63,22 @@ public class ManagerLevel : GenericSingleton<ManagerLevel>
     {
         brainCamera.m_DefaultBlend.m_Time = 2f;
 
+        midCamera.Priority = 20;
+
         PlayerPossibleState menuPlayer = playerList.Find(p => p.PlayerType == TypeOfPlayer.OnMenu);
-        menuPlayer.Camera.Priority = 20;
+        menuPlayer.Camera.Priority = 1;
 
         PlayerPossibleState playPlayer = playerList.Find(p => p.PlayerType == TypeOfPlayer.OnPlay);
         playPlayer.Camera.Priority = 1;
 
+        yield return new WaitForSeconds(2);
+
+        menuPlayer.Camera.Priority = 20;
+        midCamera.Priority = 1;
+        SetUpForMainMenu();
+
         yield return new WaitForSeconds(1);
 
-        SetUpForMainMenu();
         NewManagerMenu.Instance.OnReturnToMainMenu();
     }
 

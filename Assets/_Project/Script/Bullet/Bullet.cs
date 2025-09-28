@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -5,9 +6,14 @@ public class Bullet : MonoBehaviour
     [Header("Setting")]
     [SerializeField] protected float lifeTime = 5;
 
-    public float SpeedBullet { get; set; }
-    public Vector3 Dir { get; set; }
-    public int Damage { get; set; }
+    [Header("Setting Pool")]
+    [SerializeField] protected string idForPool = "Bullet";
+    [SerializeField] protected GameObject objToDisable;
+
+    [SerializeField] protected float speedBullet = 15;
+    [SerializeField] protected int damage = 10;
+
+    public Vector3 direction;
 
     protected Rigidbody rb;
 
@@ -15,34 +21,33 @@ public class Bullet : MonoBehaviour
 
     public virtual void OnEnable()
     {
+        StartCoroutine(LifeTimeRoutione());
         rb.isKinematic = false;
-        VelocityZero();
-
-        rb.AddForce(Dir.normalized * SpeedBullet, ForceMode.VelocityChange);
-
-        Invoke("Disable", lifeTime);
-    }
-
-    public virtual void OnDisable() => CancelInvoke();
-
-    public virtual void Disable()
-    {
-        VelocityZero();
-        rb.isKinematic = true;
-
-        gameObject.SetActive(false);
-    }
-
-    private void VelocityZero()
-    {
         rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+    }
+
+    public void OnShoot(Vector3 direction) => rb.velocity = direction * speedBullet;
+
+    public virtual IEnumerator LifeTimeRoutione()
+    {
+        yield return new WaitForSeconds(lifeTime);
+        ReturnToPool();
     }
 
     public virtual void OnCollisionEnter(Collision collision)
     {
-        I_IDamage damage = collision.collider.GetComponent<I_IDamage>();
+        I_IDamage I_damage = collision.collider.GetComponent<I_IDamage>();
 
-        if (damage != null) damage.Damage(-Damage);
+        if (I_damage != null) I_damage.Damage(-damage);
+    }
+
+    public virtual void ReturnToPool() { if (ManagerPool.Instance != null) ManagerPool.Instance.ReturnToPool(idForPool, objToDisable); }
+
+    public virtual void OnDisable()
+    {
+        StopAllCoroutines();
+
+        rb.velocity = Vector3.zero;
+        rb.isKinematic = true;
     }
 }

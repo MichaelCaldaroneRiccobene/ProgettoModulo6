@@ -4,6 +4,7 @@ using UnityEngine.Events;
 public class Turret : MonoBehaviour
 {
     [Header("Bullet Setting")]
+    [SerializeField] protected string idBullet = "Bullet";
     [SerializeField] protected int damage = 10;
     [SerializeField] protected float speedBullet = 0.5f;
 
@@ -13,7 +14,6 @@ public class Turret : MonoBehaviour
     [SerializeField] protected float distanceToShoot = 10;
 
     public UnityEvent <bool> onRangeTarget;
-    public Control_Turrent Control_Turrent { get; set; }
 
     protected Transform target;
 
@@ -24,8 +24,6 @@ public class Turret : MonoBehaviour
 
     public virtual void Start()
     {
-        Control_Turrent = FindAnyObjectByType<Control_Turrent>();
-
         if (Game_Manager.Instance != null) target = Game_Manager.Instance.GetTarget();
     }
 
@@ -48,14 +46,20 @@ public class Turret : MonoBehaviour
 
     public virtual void Shoot()
     {
-        Bullet b = Control_Turrent.GetBullet();
-        
-        b.transform.position = firePoint.position;
-        b.Damage = damage;
-        b.Dir = transform.forward;
-        b.SpeedBullet = speedBullet;
+        GameObject obj = ManagerPool.Instance.GetGameObjFromPool(idBullet);
+        Bullet b = null;
 
+        if(obj.TryGetComponent(out Bullet bullet)) b = bullet;
+        if(b == null)
+        {
+            Debug.LogError("Not Bullet");
+            return;
+        }
+
+        b.OnShoot(transform.forward);
+        b.transform.position = firePoint.position;
         b.gameObject.SetActive(true);
+
         lastTimeShoot = Time.time;
     }
 }

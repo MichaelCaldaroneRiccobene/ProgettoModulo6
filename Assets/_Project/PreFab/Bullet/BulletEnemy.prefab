@@ -47,7 +47,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd9d045f8bdc4a4fa03d2ff6d712ec8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 5
+  lifeTime: 8
+  idForPool: Bullet
+  objToDisable: {fileID: 5248002255550745536}
 --- !u!54 &5175686696846815570
 Rigidbody:
   m_ObjectHideFlags: 0
