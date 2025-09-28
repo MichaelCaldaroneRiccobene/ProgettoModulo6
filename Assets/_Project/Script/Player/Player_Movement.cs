@@ -9,11 +9,8 @@ public class Player_Movement : MonoBehaviour
     [SerializeField] private float speedRun = 25;
     [SerializeField] private float maxRunSpeed = 30;
 
-    [SerializeField] private float maxSpeedForWalkAnimation = 0.5f;
-
     [Header("Setting Rotation Player")]
-    [SerializeField] private float speedRotatingNormal = 5;
-    [SerializeField] private float speedRotatingFocus = 10;
+    [SerializeField] private float speedRotatingNormal = 10;
 
     [Header("Setting For Jump/JumpAir")]
     [SerializeField] private float jumpForce = 10;
@@ -111,7 +108,7 @@ public class Player_Movement : MonoBehaviour
     {
         if (direction.sqrMagnitude < 0.01f) return;
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction, Vector3.up), speedRotatingFocus * Time.fixedDeltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction, Vector3.up), speedRotatingNormal * Time.fixedDeltaTime);
     }
 
     public void Movement()

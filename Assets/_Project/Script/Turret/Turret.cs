@@ -5,8 +5,6 @@ public class Turret : MonoBehaviour
 {
     [Header("Bullet Setting")]
     [SerializeField] protected string idBullet = "Bullet";
-    [SerializeField] protected int damage = 10;
-    [SerializeField] protected float speedBullet = 0.5f;
 
     [Header("Logic Shooting")]
     [SerializeField] protected Transform firePoint;

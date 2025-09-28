@@ -3,7 +3,6 @@ public class Player_Animation : MonoBehaviour
 {
     [Header("Setting")]
     [SerializeField] private string paramNameSpeed = "Speed";
-    [SerializeField] private string paramNameDirection = "Direction";
 
     [SerializeField] private string paramNameAttack = "Attack";
     [SerializeField] private string paramNameRecover = "Recover";
@@ -24,12 +23,6 @@ public class Player_Animation : MonoBehaviour
     private float SpeedJumpAir;
 
     private bool onGround;
-
-
-    private void Start()
-    {
-
-    }
 
     private void OnEnable()
     {
@@ -74,7 +67,6 @@ public class Player_Animation : MonoBehaviour
         float horizontal = Mathf.Clamp(localVelocity.x / 4, -1f, 1f);
 
         animator.SetFloat(paramNameSpeed, vertical, smoothLerpAnimation, Time.fixedDeltaTime);
-        //animator.SetFloat(paramNameDirection, speedHorizontal);
     }
 
     public void OnAttack() => animator.SetTrigger(paramNameAttack);
